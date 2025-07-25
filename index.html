@@ -1,1 +1,54 @@
-furgus lol
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furgus</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      background-color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #gif-container img {
+      width: 800px;
+      height: auto;
+      pointer-events: none;
+      user-select: none;
+      display: block;
+    }
+    @media (max-width: 820px) {
+      #gif-container img {
+        width: 90vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="gif-container">
+    <img id="introImage" src="assets/text.gif" alt="Intro" />
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      const gif = document.getElementById('introImage');
+
+      // Preload final PNG to prevent flicker
+      const finalImage = new Image();
+      finalImage.src = 'assets/furgustext.png';
+
+      setTimeout(() => {
+        gif.src = 'assets/furgustext.png';
+      }, 2190); // match GIF duration
+    });
+  </script>
+</body>
+</html>
