@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furgus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+        }
+
+        /* Plaid background patterns - actual crosshatch plaid */
+        .plaid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .bg-red .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #ff6348;
+        }
+        .bg-purple .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #667eea;
+        }
+        .bg-pink .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #ff6b6b;
+        }
+        .bg-blue .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #48dbfb;
+        }
+        .bg-green .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #26de81;
+        }
+        .bg-orange .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #feca57;
+        }
+        .bg-teal .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #00d2d3;
+        }
+        .bg-indigo .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #5f27cd;
+        }
+        .bg-yellow .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #f9ca24;
+        }
+        .bg-emerald .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #00b894;
+        }
+        .bg-violet .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #a29bfe;
+        }
+        .bg-rose .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #fd79a8;
+        }
+        .bg-sky .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #74b9ff;
+        }
+        .bg-lime .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #a4b0be;
+        }
+        .bg-black .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 40px, transparent 40px, transparent 60px, rgba(255,255,255,0.15) 60px, rgba(255,255,255,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(255,255,255,0.1) 35px, rgba(255,255,255,0.1) 40px, transparent 40px, transparent 60px, rgba(255,255,255,0.15) 60px, rgba(255,255,255,0.15) 65px),
+                #2c2c54;
+        }
+        .bg-gray .plaid-bg { 
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.1) 35px, rgba(0,0,0,0.1) 40px, transparent 40px, transparent 60px, rgba(0,0,0,0.15) 60px, rgba(0,0,0,0.15) 65px),
+                #57606f;
+        }
+
+        .bio-container {
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 2rem;
+            border: 4px solid #000;
+            border-radius: 12px;
+            background: white;
+            padding: 8px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 6px solid #000;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 0 4px #000;
+            color: #333;
+        }
+
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            object-fit: cover;
+            border: 6px solid #000;
+            display: block;
+            background: #f0f0f0;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            color: #000;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .profile-url {
+            font-size: 1rem;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .profile-bio {
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            color: #444;
+            line-height: 1.4;
+            font-style: italic;
+            border: 2px solid #000;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.05);
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            background: #fff;
+            border: 4px solid #000;
+            padding: 1rem;
+            border-radius: 12px;
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .social-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 6px 6px 0px #000;
+        }
+
+        .link-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            text-align: left;
+        }
+
+        .link-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #000;
+            background: #f8f8f8;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .link-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .link-text {
+            flex: 1;
+        }
+
+        .link-title {
+            font-weight: 900;
+            display: block;
+            font-size: 1.1rem;
+            color: #000;
+        }
+
+        .link-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 0.2rem;
+            display: block;
+            font-weight: 600;
+        }
+
+        .like-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .like-button {
+            background: #fff;
+            border: 4px solid #000;
+            color: #000;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 900;
+            box-shadow: 3px 3px 0px #000;
+        }
+
+        .like-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 5px 5px 0px #000;
+        }
+
+        .like-button.liked {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .like-count {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #000;
+        }
+
+        .cta-footer {
+            background: #fff;
+            border: 4px solid #000;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .cta-link {
+            color: #000;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .cta-link:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .spinner {
+            border: 4px solid #000;
+            border-radius: 50%;
+            border-top: 4px solid #48dbfb;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .bio-container {
+                padding: 1rem;
+            }
+            
+            .profile-card {
+                padding: 1.5rem;
+            }
+            
+            .logo {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-red">
+    <div class="plaid-bg"></div>
+    <div class="loading">
+        <div class="spinner"></div>
+        <h2>Loading bio link...</h2>
+    </div>
+
+    <script type="module">
+        // Firebase imports and config
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvcAd9o-HGRGRpW4b-gocl11vVrXiONvU",
+            authDomain: "furgusbio.firebaseapp.com",
+            projectId: "furgusbio",
+            storageBucket: "furgusbio.firebasestorage.app",
+            messagingSenderId: "175548520637",
+            appId: "1:175548520637:web:1690b607d8647f40247fd4",
+            measurementId: "G-DXTSKVPV7S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Platform icons using real logos
+        const platformIcons = {
+            'custom': 'https://cdn-icons-png.flaticon.com/512/3659/3659898.png',
+            'tiktok': 'https://cdn-icons-png.flaticon.com/512/3046/3046120.png',
+            'twitter': 'https://cdn-icons-png.flaticon.com/512/124/124021.png',
+            'instagram': 'https://cdn-icons-png.flaticon.com/512/174/174855.png',
+            'facebook': 'https://cdn-icons-png.flaticon.com/512/174/174848.png',
+            'snapchat': 'https://cdn-icons-png.flaticon.com/512/174/174872.png',
+            'pinterest': 'https://cdn-icons-png.flaticon.com/512/174/174863.png',
+            'reddit': 'https://cdn-icons-png.flaticon.com/512/174/174866.png',
+            'bluesky': 'https://cdn-icons-png.flaticon.com/512/3059/3059997.png',
+            'github': 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
+            'youtube': 'https://cdn-icons-png.flaticon.com/512/174/174883.png',
+            'linkedin': 'https://cdn-icons-png.flaticon.com/512/174/174857.png',
+            'discord': 'https://cdn-icons-png.flaticon.com/512/5968/5968756.png',
+            'twitch': 'https://cdn-icons-png.flaticon.com/512/5968/5968819.png',
+            'telegram': 'https://cdn-icons-png.flaticon.com/512/174/174855.png'
+        };
+
+        const socialPlatforms = {
+            'custom': 'Custom Website',
+            'tiktok': 'TikTok',
+            'twitter': 'Twitter/X',
+            'instagram': 'Instagram',
+            'facebook': 'Facebook',
+            'snapchat': 'Snapchat',
+            'pinterest': 'Pinterest',
+            'reddit': 'Reddit',
+            'bluesky': 'Bluesky',
+            'github': 'GitHub',
+            'youtube': 'YouTube',
+            'linkedin': 'LinkedIn',
+            'discord': 'Discord',
+            'twitch': 'Twitch',
+            'telegram': 'Telegram'
+        };
+
+        let currentProfile = null;
+
+        // Get username from URL path
+        function getUsernameFromPath() {
+            const path = window.location.pathname;
+            return path.substring(1); // Remove the leading "/"
+        }
+
+        // Extract domain from URL for favicon
+        function getDomainFromUrl(url) {
+            try {
+                const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`);
+                return urlObj.hostname;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Get favicon URL for custom links
+        function getFaviconUrl(url) {
+            const domain = getDomainFromUrl(url);
+            if (!domain) return platformIcons['custom'];
+            
+            // Try multiple favicon services for better reliability
+            return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+        }
+
+        // Extract username from Snapchat URL for Bitmoji
+        function getSnapchatUsername(url) {
+            const match = url.match(/snapchat\.com\/add\/([^/?]+)/);
+            return match ? match[1] : null;
+        }
+
+        function getIconForLink(link) {
+            if (link.platform === 'custom') {
+                return getFaviconUrl(link.url);
+            }
+            
+            if (link.platform === 'snapchat') {
+                const snapUsername = getSnapchatUsername(link.url);
+                if (snapUsername) {
+                    return `https://app.snapchat.com/web/deeplink/snapcode?username=${snapUsername}&type=SVG&bitmoji=enable`;
+                }
+            }
+            return platformIcons[link.platform] || platformIcons['custom'];
+        }
+
+        async function loadBioProfile() {
+            const username = getUsernameFromPath();
+            console.log('Trying to load profile for username:', username);
+            
+            if (!username) {
+                showError();
+                return;
+            }
+            
+            try {
+                // Get user ID from username
+                console.log('Checking username doc...');
+                const usernameDoc = await getDoc(doc(db, 'usernames', username));
+                if (!usernameDoc.exists()) {
+                    console.log('Username not found');
+                    showError();
+                    return;
+                }
+                
+                const userId = usernameDoc.data().userId;
+                console.log('Found userId:', userId);
+                
+                const profileDoc = await getDoc(doc(db, 'profiles', userId));
+                
+                if (!profileDoc.exists()) {
+                    console.log('Profile not found');
+                    showError();
+                    return;
+                }
+                
+                const profileData = profileDoc.data();
+                console.log('Profile data loaded:', profileData);
+                currentProfile = profileData;
+                displayBioProfile(profileData);
+                
+            } catch (error) {
+                console.error('Error loading bio profile:', error);
+                showError();
+            }
+        }
+
+        function displayBioProfile(profileData) {
+            console.log('Displaying bio profile');
+            
+            // Set background
+            document.body.className = `bg-${profileData.backgroundColor}`;
+            
+            // Update page title
+            document.title = `${profileData.displayName} - Furgus`;
+            
+            // Determine which logo to use
+            const isDarkBackground = ['black', 'gray', 'indigo'].includes(profileData.backgroundColor);
+            const logoSrc = isDarkBackground ? 'MWF2.png' : 'MWF.png';
+            
+            // Create the bio profile HTML
+            const bioHTML = `
+                <div class="plaid-bg"></div>
+                <div class="bio-container">
+                    <img src="${logoSrc}" alt="Furgus" class="logo">
+                    <div class="profile-card">
+                        <img src="${profileData.profilePicture || getDefaultProfilePic()}" alt="Profile" class="profile-picture">
+                        <div class="profile-name">${profileData.displayName}</div>
+                        <div class="profile-url">furgus.org/${profileData.username}</div>
+                        ${profileData.bio ? `<div class="profile-bio">${profileData.bio}</div>` : ''}
+                        <div class="social-links">
+                            ${generateSocialLinks(profileData.links || [])}
+                        </div>
+                        <div class="like-section">
+                            <button class="like-button ${isProfileLiked(profileData.username) ? 'liked' : ''}" onclick="toggleLike()">♥ ${isProfileLiked(profileData.username) ? 'Liked' : 'Like'}</button>
+                            <span class="like-count">${profileData.likes || 0} likes</span>
+                        </div>
+                        <div class="cta-footer">
+                            <a href="/getstarted" class="cta-link">Want your own professional bio link? Get started here! →</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.innerHTML = bioHTML;
+        }
+
+        function generateSocialLinks(links) {
+            if (!links || links.length === 0) {
+                return '<p style="opacity: 0.7; font-style: italic; font-weight: 600;">No links added yet</p>';
+            }
+            
+            return links.map(link => {
+                // Ensure URL has proper protocol
+                let finalUrl = link.url;
+                if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+                    finalUrl = `https://${finalUrl}`;
+                }
+                
+                const iconUrl = getIconForLink(link);
+                
+                return `
+                    <a href="${finalUrl}" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <div class="link-content">
+                            <div class="link-icon">
+                                <img src="${iconUrl}" alt="${link.platform}" onerror="this.src='${platformIcons['custom']}'">
+                            </div>
+                            <div class="link-text">
+                                <span class="link-title">${link.title}</span>
+                                <span class="link-subtitle">${socialPlatforms[link.platform] || 'Custom'}</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        function getDefaultProfilePic() {
+            return "assets/default.png";
+        }
+
+        function isProfileLiked(username) {
+            const likedProfiles = JSON.parse(localStorage.getItem('likedProfiles') || '[]');
+            return likedProfiles.includes(username);
+        }
+
+        window.toggleLike = async function() {
+            if (!currentProfile) return;
+            
+            const username = currentProfile.username;
+            const likedProfiles = JSON.parse(localStorage.getItem('likedProfiles') || '[]');
+            const isLiked = likedProfiles.includes(username);
+            
+            try {
+                const profileRef = doc(db, 'profiles', currentProfile.userId);
+                
+                if (isLiked) {
+                    // Unlike
+                    await updateDoc(profileRef, { likes: increment(-1) });
+                    const index = likedProfiles.indexOf(username);
+                    likedProfiles.splice(index, 1);
+                    document.querySelector('.like-button').classList.remove('liked');
+                    document.querySelector('.like-button').innerHTML = '♥ Like';
+                } else {
+                    // Like
+                    await updateDoc(profileRef, { likes: increment(1) });
+                    likedProfiles.push(username);
+                    document.querySelector('.like-button').classList.add('liked');
+                    document.querySelector('.like-button').innerHTML = '♥ Liked';
+                }
+                
+                localStorage.setItem('likedProfiles', JSON.stringify(likedProfiles));
+                
+                // Update like count display
+                const currentCount = parseInt(document.querySelector('.like-count').textContent);
+                const newCount = isLiked ? currentCount - 1 : currentCount + 1;
+                document.querySelector('.like-count').textContent = `${newCount} likes`;
+                
+            } catch (error) {
+                console.error('Error updating likes:', error);
+            }
+        };
+
+        function showError() {
+            document.body.innerHTML = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="UTF-8" />
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                  <title>404 - Page Not Found</title>
+                  <style>
+                    body {
+                      margin: 0;
+                      padding: 0;
+                      background-color: #000;
+                      color: #fff;
+                      font-family: Arial, sans-serif;
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
+                      justify-content: center;
+                      height: 100vh;
+                      text-align: center;
+                    }
+                    img {
+                      max-width: 300px;
+                      width: 100%;
+                      margin-bottom: 20px;
+                    }
+                    h1 {
+                      font-size: 2.5rem;
+                      margin: 0;
+                    }
+                    p {
+                      font-size: 1.2rem;
+                      margin: 10px 0 30px;
+                      color: #ccc;
+                    }
+                    a.button {
+                      display: inline-block;
+                      padding: 12px 24px;
+                      color: white;
+                      background-color: red;
+                      border: 2px solid gray;
+                      text-decoration: none;
+                      border-radius: 5px;
+                      font-weight: bold;
+                      transition: background-color 0.3s ease, border-color 0.3s ease;
+                    }
+                    a.button:hover {
+                      background-color: darkred;
+                      border-color: #999;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <img src="404.png" alt="404 Image" />
+                  <h1>Something went wrong</h1>
+                  <p>Page not available</p>
+                  <a class="button" href="https://furgus.org">Go Home</a>
+                </body>
+                </html>
+            `;
+        }
+
+        // Start loading the bio profile
+        loadBioProfile();
+    </script>
+</body>
+</html>
