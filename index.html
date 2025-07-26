@@ -1,215 +1,858 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Canvas GIF Control</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furgus</title>
+  <link rel="icon" type="image/png" href="assets/icon.png" />
+  <link rel="shortcut icon" type="image/png" href="assets/icon.png" />
+  <link rel="apple-touch-icon" href="assets/icon.png" />
   <style>
-    body {
+    * {
       margin: 0;
       padding: 0;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      background-color: #000000 !important;
       color: white;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
     }
 
+    /* Hide scrollbar completely */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Firefox */
+    * {
+      scrollbar-width: none;
+    }
+
+    /* Intro container */
     .intro-container {
+      height: 100vh;
+      width: 100vw;
+      background-color: #000000 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      transition: opacity 0.8s ease-out;
+    }
+
+    #introVideo {
+      width: min(800px, 90vw);
+      height: auto;
+      max-height: 80vh;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+
+    /* Fallback image if video fails */
+    #fallbackImage {
+      width: min(800px, 90vw);
+      height: auto;
+      max-height: 80vh;
+      object-fit: contain;
+      display: none;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Site content */
+    .site-content {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1.2s ease-in-out;
+      min-height: 100vh;
+      background-color: #000000;
+      display: none;
+    }
+
+    .site-content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger animations for sections */
+    .hero-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out 0.2s;
+    }
+
+    .why-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out 0.4s;
+    }
+
+    .reviews-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out 0.6s;
+    }
+
+    .footer {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out 0.8s;
+    }
+
+    .site-content.visible .hero-section,
+    .site-content.visible .why-section,
+    .site-content.visible .reviews-section,
+    .site-content.visible .footer {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 120px;
+      background: 
+        repeating-linear-gradient(45deg, #B22222 0px, #B22222 30px, #8B0000 30px, #8B0000 60px),
+        repeating-linear-gradient(-45deg, #A0522D 0px, #A0522D 30px, #654321 30px, #654321 60px);
+      background-blend-mode: multiply;
+      border-bottom: 4px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .site-header img {
+      width: 220px;
+      height: auto;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 200px 40px 100px;
+      text-align: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      margin-bottom: 30px;
+      color: #ffffff;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
+      letter-spacing: 2px;
+      -webkit-text-stroke: 3px #8B0000;
+      text-stroke: 3px #8B0000;
+      font-weight: 900;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+    }
+
+    .hero-subtitle {
+      font-size: 1.4rem;
+      color: #ccc;
+      margin-bottom: 20px;
+      line-height: 1.6;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .arrow-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .arrow-icon {
+      width: 40px;
+      height: 40px;
+      fill: none;
+      stroke: #8B0000;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .get-started-btn {
+      display: inline-block;
+      padding: 25px 60px;
+      background: linear-gradient(145deg, #8B0000, #A00000);
+      border: 4px solid #8B0000;
+      border-radius: 15px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.4),
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 8px 20px rgba(139, 0, 0, 0.4);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+      text-transform: uppercase;
+    }
+
+    .get-started-btn:hover {
+      background: linear-gradient(145deg, #A00000, #B00000);
+      border-color: #A00000;
+      transform: translateY(-5px);
+      box-shadow: 
+        0 30px 70px rgba(0, 0, 0, 0.5),
+        0 15px 40px rgba(0, 0, 0, 0.4),
+        0 15px 35px rgba(139, 0, 0, 0.5);
+    }
+
+    /* Why Choose Us Section */
+    .why-section {
+      padding: 100px 40px;
+      background: linear-gradient(180deg, #000000, #1a1a1a);
       text-align: center;
     }
 
-    #gifCanvas {
-      max-width: 800px;
-      width: 90vw;
-      height: auto;
-      border: 1px solid #333;
+    .why-title {
+      font-size: 3rem;
+      margin-bottom: 60px;
+      color: #ffffff;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
+      letter-spacing: 1px;
+      font-weight: bold;
     }
 
-    .controls {
-      margin-top: 20px;
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 50px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    button {
-      background: #333;
-      color: white;
-      border: 1px solid #666;
-      padding: 10px 20px;
-      margin: 0 10px;
-      cursor: pointer;
-      border-radius: 4px;
+    .feature-card {
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      padding: 40px 30px;
+      border-radius: 15px;
+      border: 2px solid #444;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     }
 
-    button:hover {
-      background: #555;
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(139, 0, 0, 0.3);
+      border-color: #8B0000;
     }
 
-    .status {
-      margin-top: 10px;
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #8B0000;
+      display: flex;
+      justify-content: center;
+    }
+
+    .feature-icon svg {
+      width: 48px;
+      height: 48px;
+      fill: #8B0000;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .feature-text {
       color: #ccc;
+      line-height: 1.6;
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+      padding: 100px 40px;
+      text-align: center;
+      background: #000000;
+    }
+
+    .reviews-title {
+      font-size: 3rem;
+      margin-bottom: 60px;
+      color: #ffffff;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .review-card {
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      padding: 40px;
+      border-radius: 15px;
+      border: 2px solid #444;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .review-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(139, 0, 0, 0.3);
+    }
+
+    .stars {
+      color: #FFD700;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .review-text {
+      color: #ccc;
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .reviewer-name {
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .reviewer-company {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: 
+        repeating-linear-gradient(45deg, #B22222 0px, #B22222 30px, #8B0000 30px, #8B0000 60px),
+        repeating-linear-gradient(-45deg, #A0522D 0px, #A0522D 30px, #654321 30px, #654321 60px);
+      background-blend-mode: multiply;
+      padding: 80px 40px 60px;
+      text-align: center;
+      border-top: 4px solid #ffffff;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid #8B0000;
+      margin: 0 auto 40px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    .footer-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .contact-title {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      color: #fff;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
+      letter-spacing: 1px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .social-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .social-icon {
+      width: 28px;
+      height: 28px;
+      filter: brightness(0) invert(1);
+    }
+
+    .email-contact {
+      margin-top: 30px;
+      font-size: 1.3rem;
+      color: #fff;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+    }
+
+    .email-contact a {
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .email-contact a:hover {
+      border-color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 820px) {
+      #introVideo, #fallbackImage {
+        width: min(95vw, 600px);
+        max-height: 70vh;
+      }
+      
+      .site-header {
+        height: 100px;
+      }
+      
+      .site-header img {
+        width: 180px;
+      }
+      
+      .hero-section {
+        padding: 150px 20px 80px;
+      }
+      
+      .hero-title {
+        font-size: 2.8rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+
+      .arrow-icon {
+        width: 32px;
+        height: 32px;
+      }
+
+      .get-started-btn {
+        padding: 20px 40px;
+        font-size: 1.3rem;
+      }
+
+      .why-title, .reviews-title {
+        font-size: 2.2rem;
+      }
+
+      .features-grid, .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .social-links {
+        gap: 30px;
+      }
+
+      .footer-logo {
+        width: 100px;
+        height: 100px;
+      }
+
+      .contact-title {
+        font-size: 2.2rem;
+      }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 480px) {
+      #introVideo, #fallbackImage {
+        width: 95vw;
+        max-height: 60vh;
+      }
+
+      .site-header {
+        height: 80px;
+      }
+      
+      .site-header img {
+        width: 160px;
+      }
+
+      .hero-section {
+        padding: 120px 15px 60px;
+      }
+
+      .hero-title {
+        font-size: 2.2rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .arrow-icon {
+        width: 28px;
+        height: 28px;
+      }
+
+      .get-started-btn {
+        padding: 18px 35px;
+        font-size: 1.2rem;
+      }
+
+      .why-title, .reviews-title {
+        font-size: 2rem;
+      }
+
+      .social-links {
+        gap: 25px;
+      }
+
+      .footer-logo {
+        width: 90px;
+        height: 90px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="intro-container">
-    <canvas id="gifCanvas"></canvas>
+  <!-- Intro Animation -->
+  <div class="intro-container" id="introContainer">
+    <!-- Video element (converted from your GIF) -->
+    <video 
+      id="introVideo" 
+      muted 
+      playsinline 
+      preload="auto"
+      poster="assets/furgustext.png">
+      <!-- You'll need to convert your GIF to these formats -->
+      <source src="assets/text.mp4" type="video/mp4">
+      <source src="assets/text.webm" type="video/webm">
+    </video>
     
-    <div class="controls">
-      <button onclick="gifController.play()">Play</button>
-      <button onclick="gifController.pause()">Pause</button>
-      <button onclick="gifController.freezeLastFrame()">Freeze Last Frame</button>
-    </div>
-    
-    <div class="status" id="status">Loading GIF...</div>
+    <!-- Fallback image if video fails -->
+    <img id="fallbackImage" src="assets/furgustext.png" alt="Furgus" />
+  </div>
+
+  <!-- Main Site Content -->
+  <div class="site-content" id="siteContent">
+    <header class="site-header">
+      <img src="assets/transparentext.png" alt="Furgus" />
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1 class="hero-title" id="greetingTitle">Good Morning!</h1>
+      <p class="hero-subtitle">Click here to give your business what it deserves.</p>
+      <div class="arrow-container">
+        <svg class="arrow-icon" viewBox="0 0 24 24">
+          <path d="M12,2 L12,18 M7,13 L12,18 L17,13"/>
+        </svg>
+      </div>
+      <a href="getstarted.html" class="get-started-btn">Get Started</a>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-section">
+      <h2 class="why-title">Why Choose Furgus?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M7,15H9C9,16.08 10.37,17 12,17C13.63,17 15,16.08 15,15C15,13.9 13.96,13.5 11.76,12.97C9.64,12.44 7,11.78 7,9C7,7.21 8.47,5.69 10.5,5.18V3H13.5V5.18C15.53,5.69 17,7.21 17,9H15C15,7.92 13.63,7 12,7C10.37,7 9,7.92 9,9C9,10.1 10.04,10.5 12.24,11.03C14.36,11.56 17,12.22 17,15C17,16.79 15.53,18.31 13.5,18.82V21H10.5V18.82C8.47,18.31 7,16.79 7,15Z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Unmatched Prices</h3>
+          <p class="feature-text">We believe quality shouldn't cost a fortune. Get premium results at prices that make sense for your business, without hidden fees or surprises.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5 2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Made for You</h3>
+          <p class="feature-text">We're not a corporate machine. We genuinely think about the people behind each project and craft personalized solutions that reflect your unique vision and goals.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Unmatched Quality</h3>
+          <p class="feature-text">All designs are made by a perfectionist. I won't settle for less, neither should you. Every pixel, every line, every detail is crafted to exceed expectations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+      <h2 class="reviews-title">What Our Clients Say</h2>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"Furgus completely transformed our online presence. The website they created is not only beautiful but also incredibly functional. Our conversion rates have increased by 40% since launch!"</p>
+          <div class="reviewer-name">Sarah Johnson</div>
+          <div class="reviewer-company">CEO, TechFlow Solutions</div>
+        </div>
+        
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"Working with Furgus was an absolute pleasure. They understood our vision perfectly and delivered a graphic design package that exceeded all our expectations. Highly professional team!"</p>
+          <div class="reviewer-name">Marcus Chen</div>
+          <div class="reviewer-company">Founder, Urban Collective</div>
+        </div>
+        
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"The bio link solution they created for us is phenomenal. Clean, fast, and perfectly branded. Our social media engagement has skyrocketed since implementing it!"</p>
+          <div class="reviewer-name">Emma Rodriguez</div>
+          <div class="reviewer-company">Influencer & Content Creator</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-logo">
+        <img src="assets/Logo1.png" alt="Furgus Logo" />
+      </div>
+      
+      <h3 class="contact-title">Contact Us!</h3>
+      
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@tryfurgus" class="social-link" target="_blank" rel="noopener">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.321 5.562a5.124 5.124 0 0 1-.443-.258 6.228 6.228 0 0 1-1.137-.966c-.849-.849-1.294-1.906-1.294-3.062V1H13.54v11.846c0 2.523-2.053 4.576-4.576 4.576s-4.576-2.053-4.576-4.576S6.441 8.27 8.964 8.27c.316 0 .627.032.925.093V5.32a7.49 7.49 0 0 0-.925-.058C4.429 5.262.5 9.191.5 13.726s3.929 8.464 8.464 8.464 8.464-3.929 8.464-8.464V8.569c1.362.87 2.943 1.323 4.572 1.323v-3.007c-1.085 0-2.128-.35-2.957-.926-.406-.282-.78-.6-1.123-.951v-.446z"/>
+          </svg>
+        </a>
+        
+        <a href="https://www.instagram.com/tryfurgus" class="social-link" target="_blank" rel="noopener">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.40z"/>
+          </svg>
+        </a>
+        
+        <a href="https://www.twitter.com/tryfurgus" class="social-link" target="_blank" rel="noopener">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+          </svg>
+        </a>
+        
+        <a href="https://www.facebook.com/share/1BvCsgT5kN/?mibextid=wwXIfr" class="social-link" target="_blank" rel="noopener">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+        </a>
+      </div>
+      
+      <div class="email-contact">
+        <a href="mailto:contact@furgus.org">contact@furgus.org</a>
+      </div>
+    </footer>
   </div>
 
   <script>
-    class GIFController {
-      constructor(canvasId, gifUrl) {
-        this.canvas = document.getElementById(canvasId);
-        this.ctx = this.canvas.getContext('2d');
-        this.gifUrl = gifUrl;
-        this.isPlaying = false;
-        this.currentFrame = 0;
-        this.frames = [];
-        this.frameDelay = 100; // milliseconds between frames
-        this.animationId = null;
+    class ReliableIntro {
+      constructor() {
+        this.introContainer = document.getElementById('introContainer');
+        this.video = document.getElementById('introVideo');
+        this.fallbackImage = document.getElementById('fallbackImage');
+        this.siteContent = document.getElementById('siteContent');
         
-        this.loadGIF();
+        this.hasVideoLoaded = false;
+        this.hasStarted = false;
+        
+        this.init();
       }
       
-      async loadGIF() {
-        try {
-          // For this demo, we'll simulate frames since we can't parse actual GIF frames easily
-          // In a real implementation, you'd use a library like gif.js or libgif-js
-          
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          
-          img.onload = () => {
-            this.canvas.width = img.width;
-            this.canvas.height = img.height;
-            
-            // Simulate multiple frames (you'd extract these from the actual GIF)
-            this.createSimulatedFrames(img);
-            this.updateStatus('GIF loaded. Ready to play.');
-          };
-          
-          img.src = this.gifUrl;
-          
-        } catch (error) {
-          console.error('Failed to load GIF:', error);
-          this.updateStatus('Failed to load GIF');
-        }
-      }
-      
-      createSimulatedFrames(img) {
-        // This simulates frame extraction - you'd use a proper GIF parser in reality
-        for (let i = 0; i < 30; i++) { // Simulate 30 frames
-          const frameCanvas = document.createElement('canvas');
-          frameCanvas.width = img.width;
-          frameCanvas.height = img.height;
-          const frameCtx = frameCanvas.getContext('2d');
-          
-          // Draw with slight variations to simulate animation frames
-          frameCtx.save();
-          frameCtx.translate(img.width / 2, img.height / 2);
-          frameCtx.rotate((i * Math.PI) / 180); // Rotate each frame slightly
-          frameCtx.scale(0.8 + (i * 0.01), 0.8 + (i * 0.01)); // Scale up
-          frameCtx.translate(-img.width / 2, -img.height / 2);
-          frameCtx.drawImage(img, 0, 0);
-          frameCtx.restore();
-          
-          this.frames.push(frameCanvas);
-        }
+      init() {
+        console.log('Initializing intro...');
         
-        // Show first frame
-        this.drawFrame(0);
-      }
-      
-      play() {
-        if (this.isPlaying) return;
+        // Set up video event listeners
+        this.setupVideoEvents();
         
-        this.isPlaying = true;
-        this.currentFrame = 0;
-        this.updateStatus('Playing...');
-        this.animate();
-      }
-      
-      pause() {
-        this.isPlaying = false;
-        if (this.animationId) {
-          cancelAnimationFrame(this.animationId);
-        }
-        this.updateStatus('Paused');
-      }
-      
-      animate() {
-        if (!this.isPlaying) return;
-        
-        this.drawFrame(this.currentFrame);
-        this.currentFrame++;
-        
-        if (this.currentFrame >= this.frames.length) {
-          // Animation complete - freeze on last frame
-          this.freezeLastFrame();
-          return;
-        }
-        
-        // Continue animation
+        // Fallback timeout in case video never loads
         setTimeout(() => {
-          this.animationId = requestAnimationFrame(() => this.animate());
-        }, this.frameDelay);
+          if (!this.hasStarted) {
+            console.log('Video timeout - using fallback');
+            this.useFallback();
+          }
+        }, 5000);
       }
       
-      freezeLastFrame() {
-        this.isPlaying = false;
-        if (this.animationId) {
-          cancelAnimationFrame(this.animationId);
+      setupVideoEvents() {
+        // Video can play
+        this.video.addEventListener('canplaythrough', () => {
+          console.log('Video can play through');
+          this.hasVideoLoaded = true;
+          this.startVideo();
+        });
+        
+        // Video loaded enough to start
+        this.video.addEventListener('canplay', () => {
+          if (!this.hasVideoLoaded) {
+            console.log('Video can play');
+            this.hasVideoLoaded = true;
+            this.startVideo();
+          }
+        });
+        
+        // Video ended - this is the key event!
+        this.video.addEventListener('ended', () => {
+          console.log('Video ended - frozen on last frame');
+          this.onAnimationComplete();
+        });
+        
+        // Video error
+        this.video.addEventListener('error', (e) => {
+          console.error('Video error:', e);
+          this.useFallback();
+        });
+        
+        // Start loading the video
+        this.video.load();
+      }
+      
+      startVideo() {
+        if (this.hasStarted) return;
+        
+        this.hasStarted = true;
+        
+        console.log('Starting video playback');
+        
+        // Play the video
+        const playPromise = this.video.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log('Video started playing');
+            })
+            .catch((error) => {
+              console.error('Play failed:', error);
+              this.useFallback();
+            });
         }
+      }
+      
+      useFallback() {
+        console.log('Using fallback image');
+        this.hasStarted = true;
         
-        // Draw the last frame
-        const lastFrameIndex = this.frames.length - 1;
-        this.drawFrame(lastFrameIndex);
-        this.currentFrame = lastFrameIndex;
+        // Hide video, show image
+        this.video.style.display = 'none';
+        this.fallbackImage.style.display = 'block';
         
-        this.updateStatus('Frozen on last frame');
-        
-        // Trigger your site transition here
+        // Wait a bit then transition
         setTimeout(() => {
           this.onAnimationComplete();
-        }, 1000);
-      }
-      
-      drawFrame(frameIndex) {
-        if (frameIndex < 0 || frameIndex >= this.frames.length) return;
-        
-        const frame = this.frames[frameIndex];
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(frame, 0, 0);
-      }
-      
-      updateStatus(message) {
-        document.getElementById('status').textContent = message;
+        }, 2000);
       }
       
       onAnimationComplete() {
-        console.log('Animation complete! Transitioning to site...');
-        // Your site transition code here
+        console.log('Animation complete - transitioning to site');
+        
+        // Fade out intro with faster timing
+        this.introContainer.style.transition = 'opacity 0.6s ease-out';
+        this.introContainer.style.opacity = '0';
+        
+        // Show site after shorter delay
+        setTimeout(() => {
+          this.introContainer.style.display = 'none';
+          this.siteContent.style.display = 'block';
+          document.body.style.overflow = 'auto';
+          
+          // Trigger staggered animations
+          setTimeout(() => {
+            this.siteContent.classList.add('visible');
+          }, 100);
+          
+        }, 600);
       }
     }
 
-    // Initialize when page loads
+    // Start when page loads
     window.addEventListener('load', () => {
-      // Replace with your actual GIF URL
-      window.gifController = new GIFController('gifCanvas', 'https://via.placeholder.com/400x200/000000/ffffff?text=Your+GIF');
+      new ReliableIntro();
+      setGreeting();
+    });
+
+    // Set greeting based on time of day
+    function setGreeting() {
+      const now = new Date();
+      const hour = now.getHours();
+      const greetingElement = document.getElementById('greetingTitle');
       
-      // Auto-play after a short delay
-      setTimeout(() => {
-        gifController.play();
-      }, 1000);
+      if (hour >= 5 && hour < 12) {
+        greetingElement.textContent = 'Good Morning!';
+      } else if (hour >= 12 && hour < 18) {
+        greetingElement.textContent = 'Good Afternoon!';
+      } else {
+        greetingElement.textContent = 'Good Evening!';
+      }
+    }
+
+    // Skip intro with spacebar (for testing)
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        const intro = new ReliableIntro();
+        intro.onAnimationComplete();
+      }
     });
   </script>
 </body>
