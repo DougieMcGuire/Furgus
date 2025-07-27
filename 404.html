@@ -137,7 +137,7 @@
         }
 
 .logo {
-    width: 200px; /* Bigger logo */
+    width: 300px; /* Bigger logo */
     height: auto;
     margin: 0 auto 2rem; /* Center it */
     display: block;
@@ -541,10 +541,6 @@
                         ${profileData.bio ? `<div class="profile-bio">${profileData.bio}</div>` : ''}
                         <div class="social-links">
                             ${generateSocialLinks(profileData.links || [])}
-                        </div>
-                        <div class="like-section">
-                            <button class="like-button ${isProfileLiked(profileData.username) ? 'liked' : ''}" onclick="toggleLike()">♥ ${isProfileLiked(profileData.username) ? 'Liked' : 'Like'}</button>
-                            <span class="like-count">${profileData.likes || 0} likes</span>
                         </div>
                         <div class="cta-footer">
                             <a href="/getstarted" class="cta-link">Want your own professional bio link? Get started here! →</a>
