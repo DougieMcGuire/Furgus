@@ -137,13 +137,13 @@
         }
 
 .logo {
-  width: 300px;
-  max-width: 90vw;
-  margin: 2rem auto 1 rem;
-  display: block;
-  background: transparent;
-  border: none;
-  padding: 0;
+    width: 700px; /* Bigger logo */
+    height: auto;
+    margin: 0 auto 2rem; /* Center it */
+    display: block;
+    border: none;
+    background: transparent;
+    padding: 0;
 }
         .profile-card {
             background: rgba(255, 255, 255, 0.95);
@@ -530,24 +530,23 @@
             const logoSrc = isDarkBackground ? 'assets/MWF2.png' : 'assets/mwf.png';
             
             // Create the bio profile HTML
-const bioHTML = `
-  <div class="plaid-bg"></div>
-  <img src="${logoSrc}" alt="Furgus" class="logo" />
-  <div class="bio-container">
-    <div class="profile-card">
-      <img src="${profileData.profilePicture || getDefaultProfilePic()}" alt="Profile" class="profile-picture">
-      <div class="profile-name">${profileData.displayName}</div>
-      <div class="profile-url">furgus.org/${profileData.username}</div>
-      ${profileData.bio ? `<div class="profile-bio">${profileData.bio}</div>` : ''}
-      <div class="social-links">
-        ${generateSocialLinks(profileData.links || [])}
-      </div>
-      <div class="cta-footer">
-        <a href="/getstarted" class="cta-link">Want your own professional bio link? Tap here to get started!</a>
-      </div>
-    </div>
-  </div>
-`;
+            const bioHTML = `
+                <div class="plaid-bg"></div>
+                <div class="bio-container">
+                    <img src="${logoSrc}" alt="Furgus" class="logo">
+                    <div class="profile-card">
+                        <img src="${profileData.profilePicture || getDefaultProfilePic()}" alt="Profile" class="profile-picture">
+                        <div class="profile-name">${profileData.displayName}</div>
+                        <div class="profile-url">furgus.org/${profileData.username}</div>
+                        ${profileData.bio ? `<div class="profile-bio">${profileData.bio}</div>` : ''}
+                        <div class="social-links">
+                            ${generateSocialLinks(profileData.links || [])}
+                        </div>
+                        <div class="cta-footer">
+                            <a href="/getstarted" class="cta-link">Want your own professional bio link? Tap here to get started!</a>
+                        </div>
+                    </div>
+                </div>
             `;
             
             document.body.innerHTML = bioHTML;
