@@ -131,6 +131,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
 
     .service-card {
@@ -193,6 +194,34 @@
       text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
       text-align: center;
       letter-spacing: 1px;
+    }
+
+    /* Badge CSS */
+    .rec-badge {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 140px;
+      height: 140px;
+      z-index: 10;
+      animation: throb 1.5s ease-in-out infinite;
+    }
+
+    .rec-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    @keyframes throb {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
     }
 
     .more-info {
@@ -483,6 +512,13 @@
         font-size: 0.8rem;
       }
 
+      .rec-badge {
+        width: 120px;
+        height: 120px;
+        top: -12px;
+        right: -12px;
+      }
+
       .iframe-modal {
         padding: 40px;
       }
@@ -545,6 +581,13 @@
         font-size: 1.5rem;
       }
 
+      .rec-badge {
+        width: 100px;
+        height: 100px;
+        top: -10px;
+        right: -10px;
+      }
+
       .iframe-close {
         top: 6px;
         right: 10px;
@@ -578,6 +621,9 @@
       
       <div class="services-grid">
         <div class="service-item">
+          <div class="rec-badge">
+            <img src="assets/rec.png" alt="Recommended for Businesses">
+          </div>
           <div class="service-card" onclick="openModal('https://furgus.org/wc')">
             <div class="service-card-image">
               <img src="assets/websitecreation.png" alt="Website Creation" />
@@ -615,7 +661,7 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-logo">
-      <img src="assets/Logo1.png" alt="Furgus Logo" />
+      <img src="assets/logo1.png" alt="Furgus Logo" />
     </div>
     
     <h3 class="contact-title">Contact Us!</h3>
@@ -699,9 +745,9 @@
 
     function handleInterested() {
       const pages = {
-        'website': 'website.html',
-        'graphic': 'graphic.html',
-        'bio': 'bio.html'
+        'website': 'website',
+        'graphic': 'graphic',
+        'bio': 'auth'
       };
       
       if (currentService && pages[currentService]) {
