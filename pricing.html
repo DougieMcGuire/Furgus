@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furgus - Pricing</title>
+  <link rel="icon" type="image/png" href="assets/icon.png" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      background: #ffffff;
+      color: #2c3e50;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+    }
+
+    .header {
+      text-align: center;
+      padding: 30px 20px 20px;
+      background: white;
+    }
+
+    .header img {
+      width: 280px;
+      height: auto;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 3rem;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .page-subtitle {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #7f8c8d;
+      margin-bottom: 60px;
+      font-weight: 400;
+    }
+
+    /* Plan Cards */
+    .plans-section {
+      margin-bottom: 80px;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .plan-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 40px;
+      border: 2px solid #e8eaed;
+      transition: all 0.3s ease;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .plan-card:hover {
+      transform: translateY(-8px);
+      border-color: #1a73e8;
+      box-shadow: 0 12px 24px rgba(26,115,232,0.15);
+    }
+
+    .plan-card.recommended {
+      border-color: #34a853;
+      background: linear-gradient(135deg, #f8fff9, #ffffff);
+      transform: scale(1.05);
+      position: relative;
+      box-shadow: 0 8px 20px rgba(52,168,83,0.15);
+    }
+
+    .plan-card.recommended::before {
+      content: "RECOMMENDED";
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #34a853;
+      color: white;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(52,168,83,0.3);
+    }
+
+    .plan-name {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #2c3e50;
+    }
+
+    .plan-price {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: #1a73e8;
+      margin-bottom: 8px;
+      letter-spacing: -2px;
+    }
+
+    .plan-price .period {
+      font-size: 1.1rem;
+      color: #5f6368;
+      font-weight: 400;
+    }
+
+    .plan-description {
+      color: #5f6368;
+      margin-bottom: 32px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .plan-features li {
+      padding: 12px 0;
+      color: #3c4043;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .plan-features li::before {
+      content: "✓";
+      color: #34a853;
+      font-weight: 600;
+      margin-right: 12px;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .cta-button {
+      background: #1a73e8;
+      color: white;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 2px 8px rgba(26,115,232,0.2);
+    }
+
+    .cta-button:hover {
+      background: #1557b0;
+      box-shadow: 0 4px 12px rgba(26,115,232,0.3);
+    }
+
+    /* Yearly Plans */
+    .yearly-section {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      border-radius: 16px;
+      padding: 40px;
+      margin: 60px 0;
+      border: 2px solid #e8eaed;
+      text-align: center;
+    }
+
+    .yearly-title {
+      color: #1a73e8;
+      font-size: 2rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .yearly-subtitle {
+      color: #5f6368;
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+
+    .yearly-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .yearly-plan {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      border: 2px solid #e8eaed;
+      transition: all 0.2s ease;
+    }
+
+    .yearly-plan:hover {
+      border-color: #1a73e8;
+      box-shadow: 0 4px 12px rgba(26,115,232,0.1);
+    }
+
+    .yearly-plan h4 {
+      color: #2c3e50;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .yearly-price {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a73e8;
+      margin-bottom: 8px;
+    }
+
+    .savings-badge {
+      color: #34a853;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: #e8f5e8;
+      padding: 4px 12px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    /* Branding Packages */
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .package-card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      border: 2px solid #e8eaed;
+      transition: all 0.3s ease;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .package-card:hover {
+      transform: translateY(-8px);
+      border-color: #1a73e8;
+      box-shadow: 0 12px 24px rgba(26,115,232,0.15);
+    }
+
+    .package-card.popular {
+      border-color: #ea4335;
+      background: linear-gradient(135deg, #fef7f0, #ffffff);
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(234,67,53,0.15);
+    }
+
+    .package-card.popular::before {
+      content: "MOST POPULAR";
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ea4335;
+      color: white;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(234,67,53,0.3);
+    }
+
+    /* Individual Services */
+    .individual-section {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 60px;
+      border: 2px solid #e8eaed;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .individual-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .individual-item {
+      background: #f8f9fa;
+      padding: 28px;
+      border-radius: 12px;
+      border: 2px solid #e8eaed;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .individual-item:hover {
+      border-color: #1a73e8;
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(26,115,232,0.1);
+    }
+
+    .individual-item h4 {
+      color: #2c3e50;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .individual-price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a73e8;
+      margin-bottom: 8px;
+    }
+
+    .pro-tip {
+      text-align: center;
+      margin-top: 32px;
+      padding: 24px;
+      background: linear-gradient(135deg, #e3f2fd, #ffffff);
+      border-radius: 12px;
+      border: 2px solid #1a73e8;
+    }
+
+    .pro-tip p {
+      color: #1565c0;
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    /* Comparison Section */
+    .comparison-section {
+      margin-top: 80px;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: 2px solid #e8eaed;
+    }
+
+    .table-header {
+      background: #f8f9fa;
+      padding: 32px;
+      text-align: center;
+      border-bottom: 2px solid #e8eaed;
+    }
+
+    .table-header h2 {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .table-header p {
+      font-size: 1.1rem;
+      color: #5f6368;
+    }
+
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      font-size: 0.95rem;
+    }
+
+    .pricing-table th {
+      background: #f8f9fa;
+      padding: 18px 15px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1rem;
+      border-bottom: 2px solid #e8eaed;
+      color: #2c3e50;
+    }
+
+    .pricing-table th:first-child {
+      text-align: left;
+      background: #f1f3f4;
+      font-weight: 600;
+    }
+
+    .pricing-table td {
+      padding: 16px 15px;
+      border-bottom: 1px solid #e8eaed;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .pricing-table td:first-child {
+      text-align: left;
+      font-weight: 500;
+      background: #f8f9fa;
+      color: #2c3e50;
+    }
+
+    .furgus-price {
+      color: #34a853 !important;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .competitor-price {
+      color: #ea4335;
+      font-weight: 500;
+      text-decoration: line-through;
+      font-size: 0.9rem;
+    }
+
+    .savings {
+      background: #e8f5e8;
+      color: #137333;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.4rem;
+      color: #2c3e50;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #5f6368;
+      margin-bottom: 48px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
+      .header img {
+        width: 220px;
+      }
+      
+      .page-title {
+        font-size: 2.4rem;
+      }
+      
+      .pricing-table {
+        font-size: 0.85rem;
+      }
+      
+      .pricing-table th,
+      .pricing-table td {
+        padding: 12px 8px;
+      }
+      
+      .plans-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .plan-card.recommended,
+      .package-card.popular {
+        transform: none;
+      }
+      
+      .plan-price {
+        font-size: 2.6rem;
+      }
+      
+      .yearly-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .package-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 15px;
+      }
+      
+      .pricing-table th,
+      .pricing-table td {
+        padding: 10px 6px;
+        font-size: 0.8rem;
+      }
+      
+      .plan-card, .package-card {
+        padding: 28px;
+      }
+      
+      .plan-price {
+        font-size: 2.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="assets/transparentext.png" alt="Furgus">
+  </div>
+
+  <div class="container" id="websitePricing" style="display: none;">
+    <h1 class="page-title">Website Pricing</h1>
+    <p class="page-subtitle">Professional websites that don't cost a fortune</p>
+
+    <div class="plans-section">
+      <div class="plans-grid">
+        <div class="plan-card">
+          <h3 class="plan-name">Minimal</h3>
+          <div class="plan-price">$10.99<span class="period">/month</span></div>
+          <p class="plan-description">We understand what it's like to start from scratch as a business. Not everyone can afford premium features right away.</p>
+          <ul class="plan-features">
+            <li>YourName.furgus.org domain</li>
+            <li>Fully customized design</li>
+            <li>Mobile optimization</li>
+            <li>Ongoing support & edits</li>
+            <li>Subtle "Made with Furgus" tag</li>
+            <li>Ads may appear occasionally</li>
+            <li>SSL certificate included</li>
+          </ul>
+          <a href="#" class="cta-button">Start Building</a>
+        </div>
+
+        <div class="plan-card">
+          <h3 class="plan-name">Standard</h3>
+          <div class="plan-price">$23.99<span class="period">/month</span></div>
+          <p class="plan-description">Perfect for small businesses who need a professional presence with custom branding.</p>
+          <ul class="plan-features">
+            <li>Custom domain (yourbusiness.com)</li>
+            <li>Everything in Minimal</li>
+            <li>Unlimited edit requests</li>
+            <li>100% ad-free experience</li>
+            <li>Priority support</li>
+            <li>Basic SEO setup</li>
+            <li>Contact forms</li>
+          </ul>
+          <a href="#" class="cta-button">Get Standard</a>
+        </div>
+
+        <div class="plan-card recommended">
+          <h3 class="plan-name">Best for Business</h3>
+          <div class="plan-price">$34.99<span class="period">/month</span></div>
+          <p class="plan-description">The complete solution for serious businesses. Everything to dominate your competition online.</p>
+          <ul class="plan-features">
+            <li>Everything in Standard</li>
+            <li>Professional email (you@yourbusiness.com)</li>
+            <li>NO Furgus branding anywhere</li>
+            <li>Same-day edit turnaround</li>
+            <li>Advanced SEO optimization</li>
+            <li>Mobile speed optimization</li>
+            <li>Custom favicon & branding</li>
+            <li>Analytics setup</li>
+            <li>White-glove service</li>
+          </ul>
+          <a href="#" class="cta-button">Go Premium</a>
+        </div>
+      </div>
+
+      <div class="yearly-section">
+        <h3 class="yearly-title">Save with Yearly Plans</h3>
+        <p class="yearly-subtitle">Lock in these prices and get 2 months free</p>
+        <div class="yearly-grid">
+          <div class="yearly-plan">
+            <h4>Minimal Yearly</h4>
+            <div class="yearly-price">$109.99/year</div>
+            <div class="savings-badge">Save $21.89</div>
+          </div>
+          <div class="yearly-plan">
+            <h4>Standard Yearly</h4>
+            <div class="yearly-price">$239.99/year</div>
+            <div class="savings-badge">Save $47.89</div>
+          </div>
+          <div class="yearly-plan">
+            <h4>Best for Business Yearly</h4>
+            <div class="yearly-price">$349.99/year</div>
+            <div class="savings-badge">Save $69.89</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comparison-section">
+      <div class="table-header">
+        <h2>How We Compare to Professional Web Designers</h2>
+        <p>See the difference for yourself</p>
+      </div>
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Furgus</th>
+            <th>WebFX</th>
+            <th>Freelancers</th>
+            <th>Agencies</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Custom Website Design</td>
+            <td class="furgus-price">$10.99/mo</td>
+            <td class="competitor-price">$1,000-$100,000</td>
+            <td class="competitor-price">$1,001-$5,000</td>
+            <td class="competitor-price">$5,000-$30,000</td>
+          </tr>
+          <tr>
+            <td>Mobile Optimization</td>
+            <td class="furgus-price">Included</td>
+            <td class="competitor-price">$500+ extra</td>
+            <td class="competitor-price">$300+ extra</td>
+            <td class="competitor-price">Included</td>
+          </tr>
+          <tr>
+            <td>Ongoing Support & Edits</td>
+            <td class="furgus-price">Included</td>
+            <td class="competitor-price">$75-150/hour</td>
+            <td class="competitor-price">$20-150/hour</td>
+            <td class="competitor-price">$50-150/hour</td>
+          </tr>
+          <tr>
+            <td>Domain & Hosting</td>
+            <td class="furgus-price">Included</td>
+            <td class="competitor-price">$50-200/mo extra</td>
+            <td class="competitor-price">$10-50/mo extra</td>
+            <td class="competitor-price">$50-300/mo extra</td>
+          </tr>
+          <tr>
+            <td>Project Timeline</td>
+            <td class="furgus-price">3-7 days</td>
+            <td class="competitor-price">3-12 weeks</td>
+            <td class="competitor-price">2-8 weeks</td>
+            <td class="competitor-price">6-20 weeks</td>
+          </tr>
+          <tr>
+            <td>First Year Total Cost</td>
+            <td class="savings">$131.88</td>
+            <td class="competitor-price">$5,000-$50,000+</td>
+            <td class="competitor-price">$2,000-$10,000+</td>
+            <td class="competitor-price">$10,000-$75,000+</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container" id="brandingPricing" style="display: none;">
+    <h1 class="page-title">Branding Pricing</h1>
+    <p class="page-subtitle">Professional branding without the designer markup</p>
+
+    <div class="plans-section">
+      <h2 class="section-title">Branding Packages</h2>
+      <p class="section-subtitle">Professional branding at prices that actually make sense</p>
+      
+      <div class="package-grid">
+        <div class="package-card">
+          <h3 class="plan-name">Basic Package</h3>
+          <div class="plan-price">$25</div>
+          <p class="plan-description">Perfect for startups and new businesses getting their visual identity started.</p>
+          <ul class="plan-features">
+            <li>Custom Logo Design</li>
+            <li>Professional Banner</li>
+            <li>High-resolution files (PNG, JPG)</li>
+            <li>Commercial usage rights</li>
+            <li>7-day turnaround</li>
+            <li>Unlimited revisions</li>
+          </ul>
+          <a href="#" class="cta-button">Get Basic</a>
+        </div>
+
+        <div class="package-card popular">
+          <h3 class="plan-name">Pro Package</h3>
+          <div class="plan-price">$50</div>
+          <p class="plan-description">Complete branding solution that covers all your promotional needs. Best value!</p>
+          <ul class="plan-features">
+            <li>Everything in Basic Package</li>
+            <li>2 Custom Poster Designs</li>
+            <li>Business Card Design</li>
+            <li>Brand color palette</li>
+            <li>Vector files (AI, EPS, SVG)</li>
+            <li>5-day priority turnaround</li>
+            <li>Brand style guide</li>
+          </ul>
+          <a href="#" class="cta-button">Get Pro</a>
+        </div>
+      </div>
+
+      <div class="individual-section">
+        <h3 class="section-title">Individual Design Services</h3>
+        <p class="section-subtitle">Need just one specific design? We've got à la carte pricing too.</p>
+        <div class="individual-grid">
+          <div class="individual-item">
+            <h4>Logo Design</h4>
+            <div class="individual-price">$15</div>
+            <p style="color: #5f6368; font-size: 0.9rem; margin-top: 8px;">Custom, professional logo with unlimited revisions</p>
+          </div>
+          <div class="individual-item">
+            <h4>Banner Design</h4>
+            <div class="individual-price">$15</div>
+            <p style="color: #5f6368; font-size: 0.9rem; margin-top: 8px;">Perfect for social media, websites, or print</p>
+          </div>
+          <div class="individual-item">
+            <h4>Poster Design</h4>
+            <div class="individual-price">$15</div>
+            <p style="color: #5f6368; font-size: 0.9rem; margin-top: 8px;">First poster $15, additional posters just $5 each</p>
+          </div>
+          <div class="individual-item">
+            <h4>Business Card</h4>
+            <div class="individual-price">$15</div>
+            <p style="color: #5f6368; font-size: 0.9rem; margin-top: 8px;">Professional design ready for printing</p>
+          </div>
+        </div>
+        <div class="pro-tip">
+          <p>💡 Pro Tip: Order multiple posters and save $10 each! The Pro Package saves you $20 overall.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="comparison-section">
+      <div class="table-header">
+        <h2>Furgus vs Professional Graphic Designers</h2>
+        <p>The numbers speak for themselves</p>
+      </div>
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Furgus</th>
+            <th>Freelancers</th>
+            <th>Design Agencies</th>
+            <th>Fiverr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Logo Design</td>
+            <td class="furgus-price">$15</td>
+            <td class="competitor-price">$300-$2,500</td>
+            <td class="competitor-price">$2,500-$10,000</td>
+            <td class="competitor-price">$100-$1,000</td>
+          </tr>
+          <tr>
+            <td>Banner Design</td>
+            <td class="furgus-price">$15</td>
+            <td class="competitor-price">$150-$500</td>
+            <td class="competitor-price">$300-$800</td>
+            <td class="competitor-price">$50-$300</td>
+          </tr>
+          <tr>
+            <td>Poster Design</td>
+            <td class="furgus-price">$15</td>
+            <td class="competitor-price">$200-$800</td>
+            <td class="competitor-price">$500-$1,500</td>
+            <td class="competitor-price">$75-$400</td>
+          </tr>
+          <tr>
+            <td>Business Card Design</td>
+            <td class="furgus-price">$15</td>
+            <td class="competitor-price">$100-$400</td>
+            <td class="competitor-price">$200-$600</td>
+            <td class="competitor-price">$25-$200</td>
+          </tr>
+          <tr>
+            <td>Complete Branding Package</td>
+            <td class="savings">$50</td>
+            <td class="competitor-price">$1,000-$5,000</td>
+            <td class="competitor-price">$3,000-$15,000</td>
+            <td class="competitor-price">$500-$2,000</td>
+          </tr>
+          <tr>
+            <td>Revision Rounds</td>
+            <td class="furgus-price">Unlimited</td>
+            <td class="competitor-price">2-3 included</td>
+            <td class="competitor-price">3-5 included</td>
+            <td class="competitor-price">1-2 included</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const service = urlParams.get('s');
+
+    // Show appropriate pricing based on parameter
+    if (service === 'b') {
+      // Show branding pricing
+      document.getElementById('brandingPricing').style.display = 'block';
+    } else {
+      // Default to website pricing
+      document.getElementById('websitePricing').style.display = 'block';
+    }
+
+    // Add click handlers for CTA buttons
+    document.addEventListener('DOMContentLoaded', function() {
+      const buttons = document.querySelectorAll('.cta-button');
+      buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Get the plan name from the button's parent card
+          const planCard = button.closest('.plan-card, .package-card');
+          const planName = planCard ? planCard.querySelector('.plan-name').textContent : 'Unknown Plan';
+          
+          // Try to close the iframe and send message to parent
+          try {
+            // Send message to parent window with the selected plan
+            window.parent.postMessage({
+              type: 'plan_selected',
+              plan: planName,
+              action: 'close_iframe'
+            }, '*');
+            
+            // Fallback: try to close iframe directly
+            if (window.parent !== window) {
+              window.parent.document.querySelector('#iframeModal')?.style.setProperty('display', 'none');
+            }
+          } catch (e) {
+            // If iframe operations fail, show contact info
+            alert(`Interested in ${planName}? Contact us at contact@furgus.org or visit furgus.org to get started!`);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
