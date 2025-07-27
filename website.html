@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furgus - Website Creation</title>
+  <link rel="icon" type="image/png" href="assets/icon.png" />
+  <link rel="shortcut icon" type="image/png" href="assets/icon.png" />
+  <link rel="apple-touch-icon" href="assets/icon.png" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      background-color: #000000 !important;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Hide scrollbar completely */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Firefox */
+    * {
+      scrollbar-width: none;
+    }
+
+    /* Site content */
+    .site-content {
+      min-height: 100vh;
+      background-color: #000000;
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 120px;
+      background: 
+        repeating-linear-gradient(45deg, #B22222 0px, #B22222 30px, #8B0000 30px, #8B0000 60px),
+        repeating-linear-gradient(-45deg, #A0522D 0px, #A0522D 30px, #654321 30px, #654321 60px);
+      background-blend-mode: multiply;
+      border-bottom: 4px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .site-header img {
+      width: 220px;
+      height: auto;
+    }
+
+    .home-btn {
+      position: absolute;
+      top: 50%;
+      left: 30px;
+      transform: translateY(-50%);
+      padding: 10px 20px;
+      background: linear-gradient(145deg, #8B0000, #A00000);
+      border: 2px solid #8B0000;
+      border-radius: 8px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(139, 0, 0, 0.3);
+    }
+
+    .home-btn:hover {
+      background: linear-gradient(145deg, #A00000, #B00000);
+      transform: translateY(-50%) translateY(-2px);
+      box-shadow: 0 6px 15px rgba(139, 0, 0, 0.4);
+    }
+
+    .main-content {
+      padding: 140px 40px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
+      letter-spacing: 2px;
+      -webkit-text-stroke: 3px #8B0000;
+      text-stroke: 3px #8B0000;
+      font-weight: 900;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+    }
+
+    .hero-subtitle {
+      font-size: 1.4rem;
+      color: #ccc;
+      margin-bottom: 40px;
+      line-height: 1.6;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 20px 40px;
+      border: 4px solid #8B0000;
+      border-radius: 15px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.4),
+        0 8px 20px rgba(139, 0, 0, 0.3);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .cta-primary {
+      background: linear-gradient(145deg, #8B0000, #A00000);
+    }
+
+    .cta-secondary {
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      border-color: #444;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.5),
+        0 12px 30px rgba(139, 0, 0, 0.4);
+    }
+
+    .cta-primary:hover {
+      background: linear-gradient(145deg, #A00000, #B00000);
+      border-color: #A00000;
+    }
+
+    .cta-secondary:hover {
+      background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+      border-color: #666;
+    }
+
+    /* Features Section */
+    .features-section {
+      margin-bottom: 80px;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 50px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .feature-card {
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      padding: 30px;
+      border-radius: 15px;
+      border: 2px solid #444;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(139, 0, 0, 0.3);
+      border-color: #8B0000;
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #8B0000;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .feature-text {
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    /* Order Form */
+    .order-section {
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      padding: 50px;
+      border-radius: 20px;
+      border: 2px solid #444;
+      margin: 60px 0;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .order-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #444;
+      border-radius: 10px;
+      background: #333;
+      color: #fff;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #8B0000;
+      box-shadow: 0 0 10px rgba(139, 0, 0, 0.3);
+    }
+
+    .form-group textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(145deg, #8B0000, #A00000);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(139, 0, 0, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(145deg, #A00000, #B00000);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(139, 0, 0, 0.4);
+    }
+
+    /* Pricing Modal */
+    .pricing-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      z-index: 2000;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .pricing-modal.show {
+      opacity: 1;
+    }
+
+    .pricing-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 1200px;
+      max-height: 800px;
+      margin: 0 auto;
+      border: 4px solid #8B0000;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      background: #fff;
+      transform: scale(0.8) translateY(50px);
+      transition: all 0.4s ease;
+    }
+
+    .pricing-modal.show .pricing-container {
+      transform: scale(1) translateY(0);
+    }
+
+    .pricing-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2001;
+      transition: all 0.3s ease;
+    }
+
+    .pricing-close:hover {
+      background: rgba(0, 0, 0, 0.9);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: scale(1.1);
+    }
+
+    .pricing-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    /* Footer */
+    .footer {
+      background: 
+        repeating-linear-gradient(45deg, #B22222 0px, #B22222 30px, #8B0000 30px, #8B0000 60px),
+        repeating-linear-gradient(-45deg, #A0522D 0px, #A0522D 30px, #654321 30px, #654321 60px);
+      background-blend-mode: multiply;
+      padding: 60px 40px 40px;
+      text-align: center;
+      border-top: 4px solid #ffffff;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .footer-logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid #8B0000;
+      margin: 0 auto 30px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    .footer-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .contact-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
+    }
+
+    .email-contact {
+      font-size: 1.2rem;
+      color: #fff;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+    }
+
+    .email-contact a {
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .email-contact a:hover {
+      border-color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .site-header {
+        height: 100px;
+      }
+      
+      .site-header img {
+        width: 180px;
+      }
+      
+      .main-content {
+        padding: 120px 20px 60px;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cta-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .order-section {
+        padding: 30px;
+        margin: 40px 0;
+      }
+
+      .home-btn {
+        left: 15px;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+
+      .pricing-modal {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .site-header {
+        height: 80px;
+      }
+      
+      .site-header img {
+        width: 160px;
+      }
+
+      .main-content {
+        padding: 100px 15px 50px;
+      }
+
+      .hero-title {
+        font-size: 2.2rem;
+      }
+
+      .order-section {
+        padding: 25px;
+      }
+
+      .pricing-modal {
+        padding: 15px;
+      }
+
+      .pricing-close {
+        top: 10px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-content">
+    <header class="site-header">
+      <a href="index.html" class="home-btn">← Home</a>
+      <img src="assets/transparentext.png" alt="Furgus" />
+    </header>
+
+    <main class="main-content">
+      <div class="hero-section">
+        <h1 class="hero-title">Website Creation</h1>
+        <p class="hero-subtitle">Get a professional website that makes your business look legit. Custom designed, mobile optimized, and built to convert visitors into customers.</p>
+        
+        <div class="cta-buttons">
+          <a href="#order" class="cta-btn cta-primary">Book an Order</a>
+          <button onclick="openPricingModal()" class="cta-btn cta-secondary">View Pricing</button>
+        </div>
+      </div>
+
+      <div class="features-section">
+        <h2 class="section-title">What You Get</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3 class="feature-title">Custom Design</h3>
+            <p class="feature-text">No templates. Every website is designed from scratch to match your brand and business goals perfectly.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3 class="feature-title">Mobile Optimized</h3>
+            <p class="feature-text">Your site will look amazing on phones, tablets, and desktops. Over 60% of web traffic is mobile.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title">Lightning Fast</h3>
+            <p class="feature-text">Optimized for speed and performance. Fast sites rank better on Google and convert more visitors.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3 class="feature-title">Ongoing Support</h3>
+            <p class="feature-text">Need changes? We've got you covered. All plans include ongoing support and unlimited edits.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3 class="feature-title">SEO Ready</h3>
+            <p class="feature-text">Built with SEO best practices so people can actually find your business on Google.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">⏰</div>
+            <h3 class="feature-title">Quick Turnaround</h3>
+            <p class="feature-text">Get your website live in 3-7 days, not weeks. We know you need to get online fast.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-section" id="order">
+        <h2 class="section-title">Book Your Website</h2>
+        <form class="order-form" onsubmit="handleOrderSubmit(event)">
+          <div class="form-group">
+            <label for="businessName">Business Name *</label>
+            <input type="text" id="businessName" name="businessName" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="contactName">Your Name *</label>
+            <input type="text" id="contactName" name="contactName" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+          
+          <div class="form-group">
+            <label for="plan">Preferred Plan</label>
+            <select id="plan" name="plan">
+              <option value="">Select a plan (optional)</option>
+              <option value="minimal">Minimal - $10.99/month</option>
+              <option value="standard">Standard - $23.99/month</option>
+              <option value="business">Best for Business - $34.99/month</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="websiteType">What type of website do you need?</label>
+            <select id="websiteType" name="websiteType">
+              <option value="business">Business/Company Website</option>
+              <option value="portfolio">Portfolio/Personal Website</option>
+              <option value="ecommerce">Online Store/E-commerce</option>
+              <option value="blog">Blog/Content Website</option>
+              <option value="landing">Landing Page</option>
+              <option value="other">Other (explain in description)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="description">Tell us about your project *</label>
+            <textarea id="description" name="description" placeholder="Describe what you need, your business, any specific features you want, design preferences, etc." required></textarea>
+          </div>
+          
+          <button type="submit" class="submit-btn">Submit Order Request</button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-logo">
+        <img src="assets/logo1.png" alt="Furgus Logo" />
+      </div>
+      
+      <h3 class="contact-title">Questions?</h3>
+      
+      <div class="email-contact">
+        <a href="mailto:contact@furgus.org">contact@furgus.org</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Pricing Modal -->
+  <div class="pricing-modal" id="pricingModal">
+    <div class="pricing-container">
+      <div class="pricing-close" onclick="closePricingModal()">&times;</div>
+      <iframe class="pricing-iframe" id="pricingIframe" src=""></iframe>
+    </div>
+  </div>
+
+  <script>
+    function openPricingModal() {
+      const modal = document.getElementById('pricingModal');
+      const iframe = document.getElementById('pricingIframe');
+      
+      // Set the iframe source to your pricing page with website parameter
+      iframe.src = 'prices.html?s=w';
+      
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      
+      // Trigger animation
+      setTimeout(() => {
+        modal.classList.add('show');
+      }, 10);
+    }
+
+    function closePricingModal() {
+      const modal = document.getElementById('pricingModal');
+      const iframe = document.getElementById('pricingIframe');
+      
+      modal.classList.remove('show');
+      
+      setTimeout(() => {
+        modal.style.display = 'none';
+        iframe.src = '';
+        document.body.style.overflow = 'auto';
+      }, 400);
+    }
+
+    // Listen for messages from the pricing iframe
+    window.addEventListener('message', function(event) {
+      if (event.data.type === 'plan_selected') {
+        console.log('Plan selected:', event.data.plan);
+        
+        // Close the modal
+        closePricingModal();
+        
+        // Optionally pre-fill the form with the selected plan
+        const planSelect = document.getElementById('plan');
+        const planName = event.data.plan.toLowerCase();
+        if (planName.includes('minimal')) {
+          planSelect.value = 'minimal';
+        } else if (planName.includes('standard')) {
+          planSelect.value = 'standard';
+        } else if (planName.includes('business')) {
+          planSelect.value = 'business';
+        }
+        
+        // Scroll to the order form
+        document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    function handleOrderSubmit(event) {
+      event.preventDefault();
+      
+      // Get form data
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData);
+      
+      // You can process the form data here
+      console.log('Order submitted:', data);
+      
+      // For now, just show a success message
+      alert('Order request submitted! We\'ll contact you within 24 hours to discuss your project. Check your email for confirmation.');
+      
+      // Reset form
+      event.target.reset();
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closePricingModal();
+      }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('pricingModal').addEventListener('click', (e) => {
+      if (e.target.id === 'pricingModal') {
+        closePricingModal();
+      }
+    });
+
+    // Smooth scroll for anchor links
+    document.addEventListener('DOMContentLoaded', function() {
+      const bookOrderBtn = document.querySelector('a[href="#order"]');
+      if (bookOrderBtn) {
+        bookOrderBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
