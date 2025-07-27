@@ -588,8 +588,8 @@
           </div>
           
           <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
           </div>
           
           <div class="form-group">
@@ -645,7 +645,28 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    // Firebase imports and config
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs, Timestamp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvcAd9o-HGRGRpW4b-gocl11vVrXiONvU",
+      authDomain: "furgusbio.firebaseapp.com",
+      projectId: "furgusbio",
+      storageBucket: "furgusbio.firebasestorage.app",
+      messagingSenderId: "175548520637",
+      appId: "1:175548520637:web:1690b607d8647f40247fd4",
+      measurementId: "G-DXTSKVPV7S"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // N8N webhook URL for sending emails (replace with your actual webhook URL)
+    const N8N_WEBHOOK_URL = 'https://your-n8n-instance.com/webhook/furgus-orders';
+
     function openPricingModal() {
       const modal = document.getElementById('pricingModal');
       const iframe = document.getElementById('pricingIframe');
@@ -675,6 +696,167 @@
       }, 400);
     }
 
+    // Rate limiting check
+    async function checkRateLimit(email) {
+      try {
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        const q = query(
+          collection(db, 'orders'),
+          where('email', '==', email),
+          where('timestamp', '>', Timestamp.fromDate(fiveMinutesAgo)),
+          orderBy('timestamp', 'desc'),
+          limit(1)
+        );
+        
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.empty; // true if no recent orders, false if rate limited
+      } catch (error) {
+        console.error('Rate limit check failed:', error);
+        return true; // Allow if check fails
+      }
+    }
+
+    // Save order to Firebase
+    async function saveOrderToFirebase(orderData) {
+      try {
+        const docRef = await addDoc(collection(db, 'orders'), {
+          ...orderData,
+          timestamp: Timestamp.now(),
+          status: 'new',
+          id: generateOrderId()
+        });
+        console.log('Order saved with ID: ', docRef.id);
+        return docRef.id;
+      } catch (error) {
+        console.error('Error saving order: ', error);
+        throw error;
+      }
+    }
+
+    // Generate unique order ID
+    function generateOrderId() {
+      return 'ORD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+    }
+
+    // Send emails via N8N webhook
+    async function sendEmails(orderData, orderId) {
+      try {
+        const webhookData = {
+          type: 'website_order',
+          orderData: {
+            ...orderData,
+            orderId: orderId,
+            timestamp: new Date().toISOString()
+          }
+        };
+
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(webhookData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to send emails');
+        }
+
+        console.log('Emails sent successfully');
+      } catch (error) {
+        console.error('Error sending emails:', error);
+        // Don't throw error here - order was saved, emails are secondary
+      }
+    }
+
+    // Show loading state
+    function setFormLoading(isLoading) {
+      const submitBtn = document.querySelector('.submit-btn');
+      const form = document.querySelector('.order-form');
+      
+      if (isLoading) {
+        submitBtn.textContent = 'SUBMITTING ORDER...';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.7';
+        form.style.pointerEvents = 'none';
+      } else {
+        submitBtn.textContent = 'SUBMIT ORDER REQUEST';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        form.style.pointerEvents = 'auto';
+      }
+    }
+
+    // Handle form submission
+    window.handleOrderSubmit = async function(event) {
+      event.preventDefault();
+      
+      // Get form data
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData);
+      
+      // Validate required fields
+      if (!data.businessName || !data.contactName || !data.email || !data.description) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Validate email and phone
+      if (!data.email.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      if (!data.phone || data.phone.length < 10) {
+        alert('Please enter a valid phone number.');
+        return;
+      }
+
+      setFormLoading(true);
+
+      try {
+        // Check rate limit
+        const canSubmit = await checkRateLimit(data.email);
+        if (!canSubmit) {
+          alert('Please wait 5 minutes before submitting another order.');
+          setFormLoading(false);
+          return;
+        }
+
+        // Prepare order data
+        const orderData = {
+          businessName: data.businessName,
+          contactName: data.contactName,
+          email: data.email,
+          phone: data.phone,
+          plan: data.plan || 'Not specified',
+          websiteType: data.websiteType,
+          description: data.description,
+          userAgent: navigator.userAgent,
+          referrer: document.referrer || 'Direct',
+          ipAddress: 'Will be captured by server'
+        };
+
+        // Save to Firebase first
+        const orderId = await saveOrderToFirebase(orderData);
+        
+        // Send emails (don't wait for this to complete)
+        sendEmails(orderData, orderId);
+
+        // Show success message
+        alert(`🎉 Order submitted successfully!\n\nOrder ID: ${orderId}\n\nWe'll contact you within 24 hours to discuss your project. Check your email for confirmation.\n\nIf you have questions, email us at contact@furgus.org`);
+        
+        // Reset form
+        event.target.reset();
+        
+      } catch (error) {
+        console.error('Order submission failed:', error);
+        alert('Sorry, there was an error submitting your order. Please try again or email us directly at contact@furgus.org');
+      }
+      
+      setFormLoading(false);
+    };
+
     // Listen for messages from the pricing iframe
     window.addEventListener('message', function(event) {
       if (event.data.type === 'plan_selected') {
@@ -698,23 +880,6 @@
         document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
       }
     });
-
-    function handleOrderSubmit(event) {
-      event.preventDefault();
-      
-      // Get form data
-      const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData);
-      
-      // You can process the form data here
-      console.log('Order submitted:', data);
-      
-      // For now, just show a success message
-      alert('Order request submitted! We\'ll contact you within 24 hours to discuss your project. Check your email for confirmation.');
-      
-      // Reset form
-      event.target.reset();
-    }
 
     // Close modal on escape key
     document.addEventListener('keydown', (e) => {
@@ -740,6 +905,10 @@
         });
       }
     });
+
+    // Make functions globally available
+    window.openPricingModal = openPricingModal;
+    window.closePricingModal = closePricingModal;
   </script>
 </body>
 </html>
