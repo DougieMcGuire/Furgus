@@ -137,13 +137,13 @@
         }
 
 .logo {
-    width: 700px; /* Bigger logo */
-    height: auto;
-    margin: 0 auto 2rem; /* Center it */
-    display: block;
-    border: none;
-    background: transparent;
-    padding: 0;
+  width: 700px;
+  max-width: 90vw;
+  margin: 2rem auto;
+  display: block;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
         .profile-card {
             background: rgba(255, 255, 255, 0.95);
@@ -532,8 +532,8 @@
             // Create the bio profile HTML
             const bioHTML = `
                 <div class="plaid-bg"></div>
+                 <img src="${logoSrc}" alt="Furgus" class="logo">
                 <div class="bio-container">
-                    <img src="${logoSrc}" alt="Furgus" class="logo">
                     <div class="profile-card">
                         <img src="${profileData.profilePicture || getDefaultProfilePic()}" alt="Profile" class="profile-picture">
                         <div class="profile-name">${profileData.displayName}</div>
