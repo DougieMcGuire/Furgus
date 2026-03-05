@@ -6,90 +6,47 @@
 <title>Speak Life Barbershop</title>
 <style>
   /* Reset */
-  * { margin:0; padding:0; box-sizing:border-box; font-family: 'Roboto', sans-serif; }
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto', sans-serif; }
 
-  body { background: #000; color: #fff; }
+  body { background:#000; color:#fff; line-height:1.6; }
 
-  /* Barber Pole Stripe Background */
-  .barber-stripe {
-    height: 15px;
-    background: repeating-linear-gradient(
-      45deg,
-      #D32F2F,
-      #D32F2F 15px,
-      #1976D2 15px,
-      #1976D2 30px,
-      #fff 30px,
-      #fff 45px
-    );
-  }
+  a { text-decoration:none; color:inherit; }
 
-  a { text-decoration: none; color: inherit; }
+  /* Barber Pole Stripe Top */
+  .barber-stripe { height:15px; background: repeating-linear-gradient(45deg,#D32F2F,#D32F2F 15px,#1976D2 15px,#1976D2 30px,#fff 30px,#fff 45px); }
 
-  /* Hero */
+  /* Header / Hero */
   header {
-    position: relative;
-    height: 100vh;
-    background-color: #111;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    color: #fff;
+    position:relative;
+    background:#111;
+    text-align:center;
+    padding:120px 20px;
   }
 
-  header::before {
-    content:"";
-    position:absolute;
-    top:0; left:0; width:100%; height:100%;
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7));
-    z-index:0;
-  }
-
-  header h1 {
-    font-size: 4em;
-    font-weight: 800;
-    z-index:1;
-  }
-
-  header p {
-    font-size: 1.5em;
-    margin: 20px 0;
-    z-index:1;
-  }
+  header h1 { font-size:3.5em; font-weight:800; margin-bottom:20px; color:#D32F2F; }
+  header p { font-size:1.4em; margin-bottom:30px; color:#fff; }
 
   .cta-btn {
-    display: inline-block;
-    padding: 15px 40px;
-    margin: 10px;
-    font-weight: bold;
-    color: #fff;
-    border-radius: 4px;
-    background-color: #D32F2F;
-    border: 2px solid #D32F2F;
-    transition: all 0.3s;
-    z-index:1;
+    display:inline-block;
+    padding:15px 40px;
+    margin:10px;
+    background:#D32F2F;
+    border:2px solid #D32F2F;
+    border-radius:5px;
+    color:#fff;
+    font-weight:bold;
+    transition:0.3s;
   }
 
-  .cta-btn:hover {
-    background-color: #1976D2;
-    border-color: #1976D2;
-  }
+  .cta-btn:hover { background:#1976D2; border-color:#1976D2; }
 
-  /* Sections */
-  section {
-    padding: 80px 20px;
-    text-align: center;
-  }
-
+  /* Section Headings */
   section h2 {
-    font-size: 2.5em;
-    margin-bottom: 30px;
-    font-weight: 700;
-    color: #D32F2F;
-    position: relative;
-    display: inline-block;
+    font-size:2.5em;
+    margin-bottom:40px;
+    color:#D32F2F;
+    position:relative;
+    display:inline-block;
   }
 
   section h2::after {
@@ -102,112 +59,58 @@
     border-radius:2px;
   }
 
-  /* About */
-  #about p { max-width:700px; margin:0 auto; font-size:1.2em; line-height:1.6em; }
+  /* About Section */
+  #about { text-align:center; padding:80px 20px; }
+  #about p { max-width:700px; margin:0 auto; font-size:1.2em; }
 
   /* Services */
-  .services {
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:25px;
-  }
-
+  .services { display:flex; flex-wrap:wrap; justify-content:center; gap:25px; margin-top:40px; }
   .service-card {
-    background: #111;
-    border: 2px solid #D32F2F;
+    background:#111;
+    border:2px solid #D32F2F;
+    border-radius:8px;
     width:250px;
     padding:30px;
-    border-radius:8px;
-    transition: all 0.3s;
-  }
-
-  .service-card:hover { border-color:#1976D2; }
-
-  .service-card h3 { margin-bottom:15px; color:#1976D2; }
-  .service-card p { font-size:1em; line-height:1.4em; }
-
-  /* Gallery */
-  .gallery {
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:25px;
-  }
-
-  .gallery img {
-    max-width:400px;
-    width:100%;
-    border-radius:10px;
-    border:4px solid #D32F2F;
-  }
-
-  /* Testimonials */
-  .testimonial {
-    background:#111;
-    border-left:6px solid #D32F2F;
-    padding:25px;
-    margin:20px auto;
-    max-width:600px;
-    border-radius:8px;
-    text-align:left;
-  }
-
-  .testimonial h4 { color:#1976D2; margin-bottom:10px; }
-  .testimonial p { font-size:1.1em; line-height:1.5em; }
-
-  /* Contact */
-  .contact-form {
-    max-width:600px;
-    margin:0 auto;
-    text-align:left;
-  }
-
-  .contact-form label { display:block; margin-bottom:5px; font-weight:bold; }
-  .contact-form input, .contact-form textarea {
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border-radius:5px;
-    border:1px solid #ccc;
-    font-size:1em;
-  }
-
-  .contact-form button {
-    background:#D32F2F;
-    color:#fff;
-    padding:15px 40px;
-    font-weight:bold;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
     transition:0.3s;
   }
+  .service-card:hover { border-color:#1976D2; }
+  .service-card h3 { margin-bottom:15px; color:#1976D2; }
+  .service-card p { font-size:1em; }
 
+  /* Gallery */
+  .gallery { display:flex; flex-wrap:wrap; justify-content:center; gap:25px; }
+  .gallery img { max-width:400px; width:100%; border-radius:10px; border:4px solid #D32F2F; }
+
+  /* Testimonials */
+  .testimonial { background:#111; border-left:6px solid #D32F2F; padding:25px; margin:20px auto; max-width:600px; border-radius:8px; text-align:left; }
+  .testimonial h4 { color:#1976D2; margin-bottom:10px; }
+  .testimonial p { font-size:1.1em; }
+
+  /* Contact */
+  #contact { padding:80px 20px; }
+  .contact-form { max-width:600px; margin:0 auto; text-align:left; }
+  .contact-form label { display:block; margin-bottom:5px; font-weight:bold; }
+  .contact-form input, .contact-form textarea {
+    width:100%; padding:12px; margin-bottom:15px; border-radius:5px; border:1px solid #ccc; font-size:1em;
+  }
+  .contact-form button {
+    background:#D32F2F; color:#fff; padding:15px 40px; font-weight:bold; border:none; border-radius:5px; cursor:pointer; transition:0.3s;
+  }
   .contact-form button:hover { background:#1976D2; }
 
-  footer {
-    padding:25px;
-    background:#111;
-    text-align:center;
-    color:#fff;
-  }
-
+  /* Footer */
+  footer { padding:25px; background:#111; text-align:center; color:#fff; }
   footer a { color:#D32F2F; }
 
   /* Responsive */
-  @media(max-width:768px) {
-    .services, .gallery { flex-direction:column; align-items:center; }
-  }
+  @media(max-width:768px) { .services, .gallery { flex-direction:column; align-items:center; } }
 
 </style>
 </head>
 <body>
 
-<!-- Barber Stripe -->
 <div class="barber-stripe"></div>
 
-<!-- Hero -->
 <header>
   <h1>Speak Life Barbershop</h1>
   <p>Fresh Cuts. Positive Vibes. Every Time.</p>
@@ -215,33 +118,29 @@
   <a href="#services" class="cta-btn">Our Services</a>
 </header>
 
-<!-- About -->
 <section id="about">
   <h2>About Us</h2>
-  <p>At Speak Life Barbershop, every haircut is a chance to speak life into your style. Led by Raj, we provide professional haircuts, fades, beard trims, and grooming services in a modern, welcoming environment. Our black interior creates a sleek, premium atmosphere where style meets comfort.</p>
+  <p>At Speak Life Barbershop, every haircut is a chance to speak life into your style. Led by Raj, we provide professional haircuts, fades, beard trims, and grooming services in a modern, welcoming environment with a sleek black interior.</p>
 </section>
 
-<!-- Services -->
 <section id="services">
   <h2>Our Services</h2>
   <div class="services">
     <div class="service-card"><h3>Haircuts</h3><p>Men, Women, and Kids – precision and style.</p></div>
-    <div class="service-card"><h3>Fades & Lineups</h3><p>Crisp, clean, and modern hair designs.</p></div>
+    <div class="service-card"><h3>Fades & Lineups</h3><p>Crisp, clean, modern hair designs.</p></div>
     <div class="service-card"><h3>Beard Trims</h3><p>Hot towel shaves and beard shaping.</p></div>
-    <div class="service-card"><h3>Facials & Grooming</h3><p>Complete grooming add-ons for a fresh look.</p></div>
+    <div class="service-card"><h3>Facials & Grooming</h3><p>Enhance your look with grooming add-ons.</p></div>
   </div>
 </section>
 
-<!-- Gallery -->
 <section id="gallery">
   <h2>Gallery</h2>
   <div class="gallery">
-    <img src="https://www.google.com/maps/uv?hl=en-us&pb=!1s0x52b2d52a3ff18643%3A0x294bcb1f09caae4a!3m1!7e140!7smaps_sv.tactile_lite_mobile!15sCgIgAQ&opi=79508299&cr=ml_3d&crv=2#">
-    <img src="https://www.google.com/maps/uv?hl=en-us&pb=!1s0x52b2d52a3ff18643%3A0x294bcb1f09caae4a!3m1!7e140!7smaps_sv.tactile_lite_mobile!15sCgIgAQ&opi=79508299&cr=ml_3d&crv=2&imagekey=!1e10!2sCIHM0ogKEICAgIDL55LnGw#">
+    <img src="https://www.google.com/maps/uv?hl=en-us&pb=!1s0x52b2d52a3ff18643%3A0x294bcb1f09caae4a!3m1!7e140!7smaps_sv.tactile_lite_mobile!15sCgIgAQ&opi=79508299&cr=ml_3d&crv=2#" alt="Barbershop Exterior">
+    <img src="https://www.google.com/maps/uv?hl=en-us&pb=!1s0x52b2d52a3ff18643%3A0x294bcb1f09caae4a!3m1!7e140!7smaps_sv.tactile_lite_mobile!15sCgIgAQ&opi=79508299&cr=ml_3d&crv=2&imagekey=!1e10!2sCIHM0ogKEICAgIDL55LnGw#" alt="Pricing Board">
   </div>
 </section>
 
-<!-- Testimonials -->
 <section id="testimonials">
   <h2>What Our Clients Say</h2>
   <div class="testimonial">
@@ -254,7 +153,6 @@
   </div>
 </section>
 
-<!-- Contact -->
 <section id="contact">
   <h2>Book Your Appointment</h2>
   <div class="contact-form">
@@ -281,7 +179,6 @@
   </div>
 </section>
 
-<!-- Footer -->
 <footer>
   <p>&copy; 2026 Speak Life Barbershop | <a href="#contact">Contact Us</a></p>
 </footer>
